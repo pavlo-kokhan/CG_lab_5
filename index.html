@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>lab_5</title>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="canvas_container col-4">
+            <h2 class="settings_name">Settings</h2>
+            <ul>
+                <li class="settings_block">
+                    <h5 class="settings_name">Scale</h5>
+                    
+                    <div class="d-flex justify-content-center align-items-center">
+                        <input id="scale" type="range" value="20" min="10" max="100" step="2" class="form-control" placeholder="Scale">
+                        <div id="scaleDisplayValue" class="ml-2">20</div>
+                        <button id="btnSetDefaultScale" class="form-control ml-2">Default</button>
+                    </div>
+                </li>
+                <li class="settings_block">
+                    <h5 class="settings_name">Trapezium Points</h5>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <input id="topLeftX" type="number" class="form-control" placeholder="Top Left X">
+                        <input id="topLeftY" type="number" class="form-control ml-2" placeholder="Top Left Y">
+                    </div>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <input id="topRightX" type="number" class="form-control" placeholder="Top Right X">
+                        <input id="topRightY" type="number" class="form-control ml-2" placeholder="Top Right Y">
+                    </div>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <input id="bottomRightX" type="number" class="form-control" placeholder="Bottom Right X">
+                        <input id="bottomRightY" type="number" class="form-control ml-2" placeholder="Bottom Right Y">
+                    </div>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <input id="bottomLeftX" type="number" class="form-control" placeholder="Bottom Left X">
+                        <input id="bottomLeftY" type="number" class="form-control ml-2" placeholder="Bottom Left Y">
+                    </div>
+                    
+                    <div class="d-flex justify-center align-items-center">
+                        <button id="btnApplyPoints" class="form-control">Apply</button>
+                        <button id="btnResetPoints" class="form-control ml-2">Reset</button>
+                    </div>
+                </li>
+                <li class="settings_block">
+                    <h5 class="settings_name">Movement</h5>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <input id="movementVectorX" type="number" class="form-control" placeholder="Vector X">
+                        <input id="movementVectorY" type="number" class="form-control ml-2" placeholder="Vector Y">
+                    </div>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <input id="increaseCoefficient" type="number" class="form-control" placeholder="Increase Coefficient">
+                    </div>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <button id="btnMoveForward" class="form-control">Move Forward</button>
+                        <button id="btnMoveBackwards" class="form-control ml-2">Move Backwards</button>
+                    </div>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <button id="btnStopMovement" class="form-control">Stop</button>
+                        <button id="btnContinueMovement" class="form-control ml-2">Continue</button>
+                    </div>
+                </li>
+                <li class="settings_block">
+                    <h5 class="settings_name">Save</h5>
+                    
+                    <div class="d-flex justify-center align-items-center mb-1">
+                        <button id="btnSaveImage" class="form-control">Save Image</button>
+                        <button id="btnSaveMatrix" class="form-control ml-2">Save Matrix</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="canvas_container col-8">
+            <canvas id="canvas" width="800" height="800"></canvas>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="./js/index.js"></script>
+</body>
+</html>
