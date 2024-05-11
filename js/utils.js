@@ -47,7 +47,7 @@ export const draw = () => {
         setStrokeStyles(ctx)
     }
 
-    const drawLabels = (canvas, fontSize) => {
+    const drawLabels = (canvas, scale, fontSize) => {
         const ctx = canvas.getContext('2d')
         const center = {
             x: canvas.width / 2,
@@ -56,7 +56,8 @@ export const draw = () => {
 
         ctx.font = `${ fontSize }px Arial`
         ctx.fillStyle = 'black'
-        ctx.fillText('0', center.x + fontSize, center.y + fontSize + fontSize / 2)
+        ctx.fillText('1', center.x + scale, center.y + fontSize + fontSize / 2)
+        ctx.fillText('-1', center.x - scale - fontSize, center.y + fontSize + fontSize / 2)
         ctx.fillText('X', canvas.width - fontSize, center.y - fontSize)
         ctx.fillText('Y', center.x + fontSize, fontSize)
         setStrokeStyles(ctx)
@@ -139,7 +140,7 @@ export const draw = () => {
         drawXAxe(canvas)
         drawYAxe(canvas)
         drawArrows(canvas, { x: 10, y: 15})
-        drawLabels(canvas, fontSize)
+        drawLabels(canvas, scale, fontSize)
         drawUnitDividerSegment(canvas, scale)
         drawGrid(canvas, scale)
     }
@@ -155,7 +156,7 @@ export const draw = () => {
         }
 
         ctx.lineTo(points[0].x, points[0].y)
-        setStrokeStyles(ctx, 'black', 'red', 1)
+        setStrokeStyles(ctx, 'red', 'blue', 1)
         ctx.fill()
         ctx.stroke()
         setStrokeStyles(ctx)
@@ -223,8 +224,11 @@ export const trapezium = () => {
     const isTrapezium = (points) => {
         const topSlope = (points[1].y - points[0].y) / (points[1].x - points[0].x)
         const bottomSlope = (points[3].y - points[2].y) / (points[3].x - points[2].x)
+        const leftSlope = (points[3].y - points[0].y) / (points[3].x - points[0].x)
+        const rightSlope = (points[2].y - points[1].y) / (points[2].x - points[1].x)
 
-        return Math.abs(topSlope - bottomSlope) < 0.0001
+        return (Math.abs(topSlope - bottomSlope) < 0.0001 && Math.abs(leftSlope - rightSlope) > 0.0001) ||
+            (Math.abs(topSlope - bottomSlope) > 0.0001 && Math.abs(leftSlope - rightSlope) < 0.0001)
     }
 
     return {
@@ -303,7 +307,7 @@ export const affine = () => {
                 [0, 0, 1]
             ]
 
-            const scaledPoint = multiplyMatrix(affineMatrix, pointMatrix);
+            const scaledPoint = multiplyMatrix(affineMatrix, pointMatrix)
 
             return {
                 x: scaledPoint[0][0],
@@ -318,54 +322,8 @@ export const affine = () => {
         }))
     }
 
-    const rotate = (points, angleInDegrees) => {
-        // Convert the angle from degrees to radians
-        const angleInRadians = (angleInDegrees * Math.PI) / 180;
-
-        // Find the centroid (average x and y coordinates) of the trapezium
-        const centroid = {
-            x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
-            y: points.reduce((sum, point) => sum + point.y, 0) / points.length
-        }
-
-        // Translate the trapezium points so that the centroid is at the origin (0, 0)
-        const translatedPoints = points.map(point => ({
-            x: point.x - centroid.x,
-            y: point.y - centroid.y
-        }))
-
-        // Apply the rotation transformation to the translated points
-        const rotatedPoints = translatedPoints.map(point => {
-            const pointMatrix = [
-                [point.x],
-                [point.y],
-                [1]
-            ]
-
-            const affineMatrix = [
-                [Math.cos(angleInRadians), -Math.sin(angleInRadians), 0],
-                [Math.sin(angleInRadians), Math.cos(angleInRadians), 0],
-                [0, 0, 1]
-            ]
-
-            const rotatedPoint = multiplyMatrix(affineMatrix, pointMatrix)
-
-            return {
-                x: rotatedPoint[0][0],
-                y: rotatedPoint[1][0]
-            }
-        })
-
-        // Translate the rotated points back to their original position
-        return rotatedPoints.map(point => ({
-            x: point.x + centroid.x,
-            y: point.y + centroid.y
-        }))
-    }
-
     return {
         shift,
         scale,
-        rotate
     }
 }
