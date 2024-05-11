@@ -318,8 +318,54 @@ export const affine = () => {
         }))
     }
 
+    const rotate = (points, angleInDegrees) => {
+        // Convert the angle from degrees to radians
+        const angleInRadians = (angleInDegrees * Math.PI) / 180;
+
+        // Find the centroid (average x and y coordinates) of the trapezium
+        const centroid = {
+            x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+            y: points.reduce((sum, point) => sum + point.y, 0) / points.length
+        }
+
+        // Translate the trapezium points so that the centroid is at the origin (0, 0)
+        const translatedPoints = points.map(point => ({
+            x: point.x - centroid.x,
+            y: point.y - centroid.y
+        }))
+
+        // Apply the rotation transformation to the translated points
+        const rotatedPoints = translatedPoints.map(point => {
+            const pointMatrix = [
+                [point.x],
+                [point.y],
+                [1]
+            ]
+
+            const affineMatrix = [
+                [Math.cos(angleInRadians), -Math.sin(angleInRadians), 0],
+                [Math.sin(angleInRadians), Math.cos(angleInRadians), 0],
+                [0, 0, 1]
+            ]
+
+            const rotatedPoint = multiplyMatrix(affineMatrix, pointMatrix)
+
+            return {
+                x: rotatedPoint[0][0],
+                y: rotatedPoint[1][0]
+            }
+        })
+
+        // Translate the rotated points back to their original position
+        return rotatedPoints.map(point => ({
+            x: point.x + centroid.x,
+            y: point.y + centroid.y
+        }))
+    }
+
     return {
         shift,
-        scale
+        scale,
+        rotate
     }
 }
