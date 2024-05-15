@@ -31,6 +31,7 @@ const {
 const {
     shift,
     scale,
+    getResultMatrix
 } = affine()
 
 const canvas = document.querySelector('#canvas')
@@ -54,6 +55,7 @@ let fontSize = 16
 let trapeziumPoints = null
 let moveVector = null
 let scaleFactor = null
+let resultMatrix = null
 
 const steps = 100
 let iteration = 0
@@ -208,8 +210,22 @@ btnSaveImage.addEventListener('click', () => {
     saveCanvasImageAsFile(canvas)
 })
 
+const saveAsJson = (content) => {
+    const json = JSON.stringify(content, null, null)
+    const blob = new Blob([json], { type: 'application/json' })
+    const downloadLink = document.createElement('a')
+    downloadLink.href = URL.createObjectURL(blob)
+    downloadLink.download = 'matrix.json'
+    downloadLink.click()
+}
+
 btnSaveMatrix.addEventListener('click', () => {
-    // todo
+    if (trapeziumPoints && moveVector && scaleFactor) {
+        resultMatrix = getResultMatrix(trapeziumPoints, moveVector, scaleFactor)
+        saveAsJson(resultMatrix)
+    } else {
+        alert('Matrix is not defined.')
+    }
 })
 
 animate()
